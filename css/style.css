@@ -1,0 +1,105 @@
+.container hr {
+	width: 200px;
+	border-top: 4px solid #666;
+}
+section {
+	min-height: 500px;
+	padding: 40px;
+}
+.portofolio {
+	background-color: #eee;
+	margin-top: 56px;
+}
+#app {
+	margin-top: 56px;
+}
+footer {
+	background-color: #333;
+	width: 100%;
+	padding: 15px 0;
+}
+footer p {
+	color: #ccc;
+	line-height: 30px;
+	margin: 0;
+}
+
+body { 
+    padding-top: 100px; 
+}
+.img-box {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background-color; green;
+  float: left;
+}
+
+.image {
+  object-fit: cover;
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.image-detail {
+	height: 500px;
+}
+.image-shows {
+	height: 500px;
+}
+.detail-head {
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 2px solid gray;
+}
+.detail-comment {
+	height: 360px;
+	overflow: auto;
+}
+.detail-comment-send {
+	height: 90px;
+}
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.img-box:hover .image {
+  opacity: 0.3;
+}
+
+.img-box:hover .middle {
+  opacity: 1;
+}
+
+.text {
+  color: white;
+  font-size: 16px;
+  line-height: 400px;
+  padding: 16px 32px;
+  width: 100%;
+}
+.caption{
+	background-color: #F0F8FF;
+	width: 100%;
+	height: 30px;
+	font-size: 16px;
+	margin-top: 400px;
+	margin-bottom: 30px;
+	padding-left: 10px;
+}
+.content {
+	width: 100%;
+	height: auto;
+	border-top: 3px solid grey;
+}
