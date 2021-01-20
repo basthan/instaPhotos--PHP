@@ -21,7 +21,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Photos App</title>
+    <title><?php echo $appname?></title>
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -31,7 +31,7 @@
   <body>
     <!-- navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="index.php">Photos App</a>
+  <a class="navbar-brand" href="index.php"><?php echo $appname?></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -80,14 +80,18 @@
             // var image = new Image()
             let reader = new FileReader()
             reader.onload = (e) => {
-              console.log('length: ', e.target.result.includes('data:image/jpeg'))
-              if (!e.target.result.includes('data:image/jpeg')) {
-                return alert('Wrong file type - JPG only.')
-              }
+              console.log('length: ', e.target.result.includes('data:image/png'))
+              if (e.target.result.includes('data:image/png')) {
+                this.image = e.target.result
+              } else if (e.target.result.includes('data:image/jpeg')) {
+                this.image = e.target.result
+              } else {
+				return alert('Wrong file type - JPG/PNG only.')
+			  }
               if (e.target.result.length > MAX_IMAGE_SIZE) {
                 return alert('Image is loo large.')
               }
-              this.image = e.target.result
+              
             }
             reader.readAsDataURL(file)
           },

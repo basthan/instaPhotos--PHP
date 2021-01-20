@@ -5,6 +5,7 @@ require_once("config.php");
         $nav_button ='<li class="nav-item">
             <a class="nav-link page-scroll" href="login.php">Login</a>
           </li>';
+		$comment_form = "<div class='discomment'><a href=\"login.php\">Login</a>/<a href=\"register.php\">Signup</a> to add comment</div>";
     }else{
 		$nav_button ='<li class="nav-item">
             <a class="nav-link page-scroll" href="#">Hi, '.$_SESSION['uname'].'</a>
@@ -14,6 +15,14 @@ require_once("config.php");
 			  <input type="submit" value="Logout" name="but_logout">
 			</form>
           </li>';
+		$comment_form = '<form action="" method="POST">
+						<div class="input-group mb-3">
+						  <input type="text" class="form-control" placeholder="Add comment..." name="comment">
+						  <div class="input-group-append">
+							<button class="btn btn-info post-btn" type="submit" name="add_comment" value="Add">Send</button>
+						  </div>
+						</div>
+					</form>';
 	}
 // logout
     if(isset($_POST['but_logout'])){
@@ -85,12 +94,12 @@ mysqli_close($mysqli);
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Hello, world!</title>
+    <title><?php echo $appname?></title>
   </head>
   <body>
 	<!-- navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand page-scroll" href="index.php">Photos App</a>
+      <a class="navbar-brand page-scroll" href="index.php"><?php echo $appname?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -120,12 +129,7 @@ mysqli_close($mysqli);
 					<p><?php echo $display_block?></p>
 				</div>
 				<div class='detail-comment-send'>
-					<form action="" method="POST">
-						<div class="form-group">
-							<input class="form-control" type="text" name="comment" placeholder="Comment"> </input>
-						</div>
-						<input type="submit" class="btn btn-info btn-block mt-4" name="add_comment" value="Add" />
-					</form>
+					<?php echo $comment_form?>
 				</div>
 			</div>
 		</div>

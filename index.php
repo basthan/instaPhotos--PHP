@@ -25,6 +25,18 @@
 			</form>
           </li>';
 	}
+	// check if comment added
+	if(isset($_POST['add_comment'])){
+		if(!isset($_SESSION['uname'])){
+			header('Location: login.php');
+		}
+		$comment = mysqli_real_escape_string($mysqli, $_POST['comment']);
+		$insertSQL = "INSERT INTO photo_comment (id,item_id,user_id,comment) values(null,?,?,?)";
+		$stmt = $mysqli->prepare($insertSQL);
+		$stmt->bind_param("sss",$_POST['photos_id'],$_SESSION['uid'],$comment);
+		$stmt->execute();
+		$stmt->close();
+	}
 
 // logout
 if(isset($_POST['but_logout'])){
@@ -46,15 +58,55 @@ if (mysqli_num_rows($get_photos_res) < 1) {
         $user_id  = $photos['user_id'];
 		$username = $photos['name'];
         $image_url  = $photos['image_url'];
-        $display_block .="<div class='col-md-6'>
+        $display_block .="<div class='row'><div class='col-md-6 offset-md-3'>
+				<div class='post-border'>
+				<div class='post-header'>
+					<div class='post-avatar'></div>
+					<h5>".$username."</h5>
+				</div>
 				<div class='img-box'>
 					<img src='https://store-bucket-app.s3.amazonaws.com/".$image_url."' alt='Avatar' class='image'>
 					<div class='middle'>
 						<div class='text'><a class='nav-link' href='shows.php?item_id=".$photos_id."'>Detail</a></div>
 					</div>
 				</div>
-				<div class='caption'>Uploader: <strong>".$username."</strong></div>
-			</div>";
+				<div class='caption'><strong><i>".$username."</i></strong></div>
+				<div class='home-comment'>
+					<p>";
+
+		//get sizes
+		$get_comments_sql = "SELECT name, comment FROM photo_comment LEFT JOIN users on photo_comment.user_id = users.id WHERE item_id = '".$photos_id."'";
+		$get_comments_res = mysqli_query($mysqli, $get_comments_sql) or die(mysqli_error($mysqli));
+
+		if (mysqli_num_rows($get_comments_res) > 0) {
+
+		  while ($comments = mysqli_fetch_array($get_comments_res)) {
+			 $user = $comments['name'];
+			 $item_comment = $comments['comment'];
+			 $display_block .= "<strong>".$user."</strong> ".$item_comment."<br>";
+		  }
+		}
+		//free result
+		mysqli_free_result($get_comments_res);
+		if(isset($_SESSION['uname'])){
+			$display_block .="</p>
+				</div>
+					<form action='' method='POST' class='comment-send'>
+						  <input type='text' class='form-control post-comment' placeholder='Add comment...' name='comment'>
+						  <input type='hidden' name='photos_id' value='".$photos_id."'>
+						  <div class='input-group-append'>
+							<button class=\"btn btn-info post-btn\" type=\"submit\" name=\"add_comment\" value='Add'>Send</button>
+						  </div>
+					</form>
+				</div>
+			</div></div>";
+		}else{
+			$display_block .="</p>
+				</div>
+				<div class='discomment'><a href=\"login.php\">Login</a>/<a href=\"register.php\">Signup</a> to add comment</div>
+				</div>
+			</div></div>";
+		}
     }
 }
 //free results
@@ -74,12 +126,12 @@ mysqli_close($mysqli);
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Hello, world!</title>
+    <title><?php echo $appname?></title>
   </head>
   <body>
 	<!-- navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand page-scroll" href="index.php">Photos App</a>
+      <a class="navbar-brand page-scroll" href="index.php"><?php echo $appname?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -95,9 +147,7 @@ mysqli_close($mysqli);
     </nav>
     <!-- akhir navbar -->
 	<div class="container">
-		<div class="row">
-			<?php echo $display_block; ?>
-		</div>
+		<?php echo $display_block; ?>
 	</div>
 
     <!-- Optional JavaScript; choose one of the two! -->
